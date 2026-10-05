@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的網頁程式作品集 | Vintage Quest Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One:ital@0;1&family=Noto+Sans+TC:wght@500;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           COLOR PALETTE DEFINITION & RESET
+           ========================================== */
+        :root {
+            --isabelline: #F4F0EC;      /* 主背景與奶油卡片底色 */
+            --vandyke: #664228;         /* 復古深棕邊框、文字與陰影 */
+            --pink-lavender: #D9AFCA;  /* 主視覺粉紫蘭點綴色 */
+            --reseda-green: #697D58;   /* 復古灰綠點綴色 */
+            
+            /* 導出衍生色 */
+            --vandyke-light: #52341e;
+            --locked-bg: #DCD7D2;
+            --locked-text: #8C827A;
+            --card-bg: #FCFBF9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--isabelline);
+            /* 點陣美式復古圖騰印刷質感 */
+            background-image: 
+                radial-gradient(var(--pink-lavender) 18%, transparent 19%),
+                radial-gradient(var(--reseda-green) 18%, transparent 19%);
+            background-size: 50px 50px;
+            background-position: 0 0, 25px 25px;
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--vandyke);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 復古紙張質感覆蓋層 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(244, 240, 236, 0.4), rgba(105, 125, 88, 0.1));
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ==========================================
+           HEADER & PROFILE SECTION (畫面正中央大頭貼與名字)
+           ========================================== */
+        .profile-card {
+            background: var(--card-bg);
+            border: 4px solid var(--vandyke);
+            box-shadow: 10px 10px 0px var(--vandyke);
+            padding: 30px;
+            border-radius: 18px;
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 520px;
+            position: relative;
+            transform: rotate(-1deg);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .profile-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* 拍立得風格照片框 */
+        .avatar-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 20px;
+            background: #ffffff;
+            padding: 10px 10px 28px 10px;
+            border: 3.5px solid var(--vandyke);
+            box-shadow: 6px 6px 0px rgba(102, 66, 40, 0.25);
+            transform: rotate(2.5deg);
+            transition: all 0.4s ease;
+        }
+
+        .profile-card:hover .avatar-wrapper {
+            transform: rotate(-3deg) scale(1.08);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 2px solid var(--vandyke);
+            filter: contrast(105%) sepia(15%);
+        }
+
+        /* 貼紙徽章 */
+        .badge-sticker {
+            position: absolute;
+            top: -15px;
+            right: -25px;
+            background: var(--pink-lavender);
+            color: var(--vandyke);
+            font-family: 'Changa One', cursive;
+            font-size: 14px;
+            padding: 6px 14px;
+            border: 3px solid var(--vandyke);
+            box-shadow: 4px 4px 0px var(--vandyke);
+            transform: rotate(12deg);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .profile-name {
+            font-family: 'Changa One', 'Noto Sans TC', sans-serif;
+            font-size: 2.5rem;
+            color: var(--vandyke);
+            text-shadow: 2px 2px 0px var(--pink-lavender);
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .profile-subtitle {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.72rem;
+            color: #ffffff;
+            background: var(--reseda-green);
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 20px;
+            border: 2.5px solid var(--vandyke);
+            box-shadow: 3px 3px 0px var(--vandyke);
+            font-weight: bold;
+        }
+
+        /* 闖關進度條 */
+        .quest-status {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--vandyke);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            width: 130px;
+            height: 16px;
+            background: #e2dad3;
+            border: 2.5px solid var(--vandyke);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 12.5%; /* 2/16 = 12.5% */
+            height: 100%;
+            background: linear-gradient(90deg, var(--pink-lavender), var(--reseda-green));
+            border-right: 2px solid var(--vandyke);
+        }
+
+        /* ==========================================
+           GRID MENU SECTION (16個按鈕選單)
+           ========================================== */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 桌機 4 列 */
+            gap: 20px;
+            width: 100%;
+        }
+
+        .menu-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 115px;
+            padding: 16px;
+            border-radius: 14px;
+            border: 3.5px solid var(--vandyke);
+            text-decoration: none;
+            color: var(--vandyke);
+            font-weight: 800;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+        }
+
+        .btn-tag {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .btn-title {
+            font-size: 1.05rem;
+            line-height: 1.35;
+            z-index: 1;
+            word-break: break-word;
+        }
+
+        /* ------------------------------------------
+           已解鎖按鈕 (UNLOCKED 1 & 2)
+           ------------------------------------------ */
+        .menu-btn.unlocked {
+            box-shadow: 6px 6px 0px var(--vandyke);
+            cursor: pointer;
+        }
+
+        /* 按鈕 1：Pink Lavender 主色 */
+        .menu-btn.unlocked.btn-1 {
+            background: #fbf0f7;
+        }
+        .menu-btn.unlocked.btn-1 .btn-tag { color: #8e4f7a; }
+
+        /* 按鈕 2：Reseda Green 主色 */
+        .menu-btn.unlocked.btn-2 {
+            background: #f0f4ee;
+        }
+        .menu-btn.unlocked.btn-2 .btn-tag { color: var(--reseda-green); }
+
+        /* 滑鼠懸停 Hover 特效 */
+        .menu-btn.unlocked:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0px var(--vandyke);
+        }
+
+        .menu-btn.unlocked.btn-1:hover {
+            background: var(--pink-lavender);
+            color: var(--vandyke);
+        }
+
+        .menu-btn.unlocked.btn-2:hover {
+            background: var(--reseda-green);
+            color: var(--isabelline);
+        }
+        .menu-btn.unlocked.btn-2:hover .btn-tag {
+            color: var(--isabelline);
+        }
+
+        .menu-btn.unlocked:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--vandyke);
+        }
+
+        .menu-btn.unlocked::after {
+            content: "GO! ➔";
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            font-family: 'Changa One', sans-serif;
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.25s ease;
+        }
+
+        .menu-btn.unlocked:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* ------------------------------------------
+           未解鎖按鈕 (LOCKED 3-16)
+           ------------------------------------------ */
+        .menu-btn.locked {
+            background: var(--locked-bg);
+            border-color: var(--vandyke);
+            color: var(--locked-text);
+            box-shadow: 4px 4px 0px var(--vandyke);
+            cursor: not-allowed;
+            opacity: 0.82;
+        }
+
+        .menu-btn.locked .btn-tag {
+            color: #786f67;
+        }
+
+        .menu-btn.locked .lock-icon {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn.locked:hover {
+            transform: translateY(-2px);
+            background: #d0c9c2;
+            box-shadow: 6px 6px 0px var(--vandyke);
+            color: var(--vandyke);
+        }
+
+        .menu-btn.locked:hover .lock-icon {
+            animation: lockShake 0.4s ease-in-out infinite alternate;
+        }
+
+        .menu-btn.locked::before {
+            content: "LOCKED";
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            color: var(--vandyke);
+            opacity: 0.5;
+        }
+
+        @keyframes lockShake {
+            0% { transform: rotate(-12deg) scale(1.15); }
+            100% { transform: rotate(12deg) scale(1.15); }
+        }
+
+        /* ==========================================
+           RESPONSIVE DESIGN (手機/平板排版適應)
+           ========================================== */
+        @media (max-width: 900px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .profile-card {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+
+            .profile-name {
+                font-size: 1.9rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr; /* 手機端為 1 列 */
+                gap: 12px;
+            }
+
+            .menu-btn {
+                min-height: 90px;
+                padding: 14px;
+            }
+            
+            .btn-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 畫面正中央的大頭貼與名字區塊 -->
+        <header class="profile-card">
+            <div class="avatar-wrapper">
+                <span class="badge-sticker">PLAYER 1</span>
+                <img src="https://picsum.photos/seed/retro-avatar/300/300" alt="大頭貼" class="avatar-img">
+            </div>
+            
+            <h1 class="profile-name">YOUR NAME</h1>
+            <div class="profile-subtitle">WEB DEV QUEST</div>
+
+            <div class="quest-status">
+                <span>QUEST PROGRESS:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <span>2 / 16</span>
+            </div>
+        </header>
+
+        <!-- 16 個按鈕 -->
+        <main class="menu-grid">
+            
+            <!-- 按鈕 1 (已解鎖 -> w1/index.html) -->
+            <a href="w1/index.html" class="menu-btn unlocked btn-1">
+                <div class="btn-tag">
+                    <span>STAGE 01</span>
+                    <span>★ OPEN</span>
+                </div>
+                <div class="btn-title">Week 1-數位名片</div>
+            </a>
+
+            <!-- 按鈕 2 (已解鎖 -> w2/index.html) -->
+            <a href="w2/index.html" class="menu-btn unlocked btn-2">
+                <div class="btn-tag">
+                    <span>STAGE 02</span>
+                    <span>★ OPEN</span>
+                </div>
+                <div class="btn-title">Week 2-今天吃甚麼？</div>
+            </a>
+
+            <!-- 按鈕 3 ~ 16 (未解鎖) -->
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 03</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 3-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 04</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 4-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 05</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 5-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 06</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 6-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 07</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 7-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 08</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 8-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 09</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 9-期中作品展</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 10</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 10-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 11</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 11-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 12</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 12-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 13</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 13-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 14</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 14-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 15</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 15-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 16</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 16-期末專題</div>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
