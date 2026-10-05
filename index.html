@@ -1,0 +1,521 @@
+overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 復古舊照片紋理濾鏡 Overlay */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>美式復古闖關作品集 | Vintage Quest Portfolio</title>
+    <!-- Google Fonts for Retro Vibes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Changa+One:ital@0;1&family=Noto+Sans+TC:wght@500;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        :root {
+            --bg-color: #fcf4dd;
+            --primary-red: #e63946;
+            --mustard-yellow: #ffb703;
+            --retro-teal: #2a9d8f;
+            --dark-navy: #1d3557;
+            --vintage-cream: #fff8eb;
+            --locked-gray: #a8a29e;
+            --locked-dark: #78716c;
+            --shadow-color: #111111;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            /* 美式點陣印刷質感背景 */
+            background-image: 
+                radial-gradient(var(--mustard-yellow) 15%, transparent 16%),
+                radial-gradient(var(--retro-teal) 15%, transparent 16%);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--dark-navy);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            background: linear-gradient(rgba(255, 248, 235, 0.25), rgba(29, 53, 87, 0.15));
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1080px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-card {
+            background: var(--vintage-cream);
+            border: 4px solid var(--shadow-color);
+            box-shadow: 10px 10px 0px var(--shadow-color);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            transform: rotate(-1deg);
+            transition: transform 0.3s ease;
+        }
+
+        .profile-card:hover {
+            transform: rotate(0deg) scale(1.02);
+        }
+
+        /* 美式拍立得風格的大頭貼容器 */
+        .avatar-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 20px;
+            background: #fff;
+            padding: 10px 10px 25px 10px; /* 拍立得底框 */
+            border: 3px solid var(--shadow-color);
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.2);
+            transform: rotate(2deg);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .profile-card:hover .avatar-wrapper {
+            transform: rotate(-3deg) scale(1.08);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 2px solid var(--shadow-color);
+            filter: contrast(110%) sepia(20%);
+        }
+
+        /* 大頭貼右上的復古貼紙裝飾 */
+        .badge-sticker {
+            position: absolute;
+            top: -15px;
+            right: -25px;
+            background: var(--primary-red);
+            color: #fff;
+            font-family: 'Changa One', cursive;
+            font-size: 14px;
+            padding: 6px 12px;
+            border: 3px solid var(--shadow-color);
+            box-shadow: 3px 3px 0px var(--shadow-color);
+            transform: rotate(12deg);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 2;
+        }
+
+        /* 名字標題與進度條 */
+        .profile-name {
+            font-family: 'Changa One', 'Noto Sans TC', sans-serif;
+            font-size: 2.4rem;
+            color: var(--primary-red);
+            text-shadow: 3px 3px 0px var(--shadow-color);
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .profile-subtitle {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.75rem;
+            color: var(--retro-teal);
+            background: #e9c46a33;
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 2px dashed var(--shadow-color);
+            font-weight: bold;
+        }
+
+        .quest-status {
+            margin-top: 18px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: var(--dark-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 14px;
+            background: #ddd;
+            border: 2px solid var(--shadow-color);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            width: 12.5%; /* 2 out of 16 unlocked = 12.5% */
+            height: 100%;
+            background: linear-gradient(90deg, var(--mustard-yellow), var(--retro-teal));
+            border-right: 2px solid var(--shadow-color);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* 電腦版4列 */
+            gap: 20px;
+            width: 100%;
+        }
+
+        /* 基礎按鈕樣式 */
+        .menu-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 110px;
+            padding: 16px;
+            border-radius: 12px;
+            border: 3.5px solid var(--shadow-color);
+            text-decoration: none;
+            color: var(--dark-navy);
+            font-weight: 800;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .btn-tag {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.65rem;
+            opacity: 0.85;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .btn-title {
+            font-size: 1.05rem;
+            line-height: 1.3;
+            z-index: 1;
+            word-break: break-word;
+        }
+
+        .menu-btn.unlocked {
+            background: var(--vintage-cream);
+            box-shadow: 6px 6px 0px var(--shadow-color);
+            cursor: pointer;
+        }
+
+        .menu-btn.unlocked.btn-1 {
+            background: #ffecd1;
+            border-color: var(--shadow-color);
+        }
+        .menu-btn.unlocked.btn-1 .btn-tag { color: var(--primary-red); }
+
+        .menu-btn.unlocked.btn-2 {
+            background: #e8f5e9;
+            border-color: var(--shadow-color);
+        }
+        .menu-btn.unlocked.btn-2 .btn-tag { color: var(--retro-teal); }
+
+        /* 滑鼠懸停 (Hover) 動畫 - 已解鎖 */
+        .menu-btn.unlocked:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0px var(--shadow-color);
+        }
+
+        .menu-btn.unlocked.btn-1:hover {
+            background: var(--mustard-yellow);
+        }
+
+        .menu-btn.unlocked.btn-2:hover {
+            background: var(--retro-teal);
+            color: #ffffff;
+        }
+        .menu-btn.unlocked.btn-2:hover .btn-tag {
+            color: #ffecd1;
+        }
+
+        .menu-btn.unlocked:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px var(--shadow-color);
+        }
+
+        .menu-btn.unlocked::after {
+            content: "GO! ➔";
+            position: absolute;
+            bottom: 10px;
+            right: 12px;
+            font-family: 'Changa One', sans-serif;
+            font-size: 0.9rem;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.25s ease;
+        }
+
+        .menu-btn.unlocked:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .menu-btn.locked {
+            background: var(--locked-gray);
+            border-color: var(--locked-dark);
+            color: #57534e;
+            box-shadow: 4px 4px 0px var(--locked-dark);
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .menu-btn.locked .btn-tag {
+            color: #44403c;
+        }
+
+        .menu-btn.locked .lock-icon {
+            font-size: 1.3rem;
+            filter: drop-shadow(1px 1px 0px rgba(255,255,255,0.5));
+            transition: transform 0.3s ease;
+        }
+
+        .menu-btn.locked:hover {
+            transform: translateY(-2px);
+            background: #98928e;
+            box-shadow: 5px 5px 0px var(--shadow-color);
+            border-color: var(--shadow-color);
+        }
+
+        .menu-btn.locked:hover .lock-icon {
+            animation: lockShake 0.4s ease-in-out infinite alternate;
+        }
+
+        .menu-btn.locked::before {
+            content: "LOCKED";
+            position: absolute;
+            bottom: 8px;
+            right: 10px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            color: #44403c;
+            letter-spacing: 1px;
+            opacity: 0.6;
+        }
+
+        @keyframes lockShake {
+            0% { transform: rotate(-12deg) scale(1.1); }
+            100% { transform: rotate(12deg) scale(1.1); }
+        }
+
+        @media (max-width: 900px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr); /* 平板 2 列 */
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 540px) {
+            body {
+                padding: 20px 12px;
+            }
+
+            .profile-card {
+                padding: 20px 15px;
+                margin-bottom: 25px;
+            }
+
+            .profile-name {
+                font-size: 1.8rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr; /* 手機版 1 列 */
+                gap: 12px;
+            }
+
+            .menu-btn {
+                min-height: 90px;
+                padding: 14px;
+            }
+            
+            .btn-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 正中央的大頭貼與個人資訊區塊 -->
+        <header class="profile-card">
+            <div class="avatar-wrapper">
+                <span class="badge-sticker">PLAYER 1</span>
+                <!-- 預設大頭貼圖片 (可自行更換網址或本機圖片路徑) -->
+                <img src="https://picsum.photos/seed/retro-avatar/300/300" alt="大頭貼" class="avatar-img">
+            </div>
+            
+            <h1 class="profile-name">YOUR NAME</h1>
+            <div class="profile-subtitle">WEB DEV QUEST 2026</div>
+
+            <div class="quest-status">
+                <span>PROGRESS:</span>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <span>2 / 16</span>
+            </div>
+        </header>
+
+        <!-- 2. 下方 16 個美式復古按鈕 (2個已解鎖 + 14個鎖定) -->
+        <main class="menu-grid">
+            
+            <a href="w1/index.html" class="menu-btn unlocked btn-1">
+                <div class="btn-tag">
+                    <span>STAGE 01</span>
+                    <span>★ OPEN</span>
+                </div>
+                <div class="btn-title">Week 1-數位名片</div>
+            </a>
+
+            <a href="w2/index.html" class="menu-btn unlocked btn-2">
+                <div class="btn-tag">
+                    <span>STAGE 02</span>
+                    <span>★ OPEN</span>
+                </div>
+                <div class="btn-title">Week 2-今天吃甚麼？</div>
+            </a>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 03</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 3-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 04</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 4-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 05</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 5-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 06</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 6-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 07</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 7-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 08</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 8-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 09</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 9-期中作品展</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 10</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 10-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 11</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 11-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 12</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 12-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 13</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 13-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 14</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 14-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 15</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 15-未解鎖任務</div>
+            </div>
+
+            <div class="menu-btn locked">
+                <div class="btn-tag">
+                    <span>STAGE 16</span>
+                    <span class="lock-icon">🔒</span>
+                </div>
+                <div class="btn-title">Week 16-期末專題</div>
+            </div>
