@@ -15,9 +15,10 @@
            ========================================== */
         :root {
             --isabelline: #F4F0EC;      /* 主背景與奶油卡片底色 */
-            --vandyke: #664228;         /* 復古深棕邊框、文字與陰影 */
+            --vandyke: #664228;          /* 復古深棕邊框、文字與陰影 */
             --pink-lavender: #D9AFCA;  /* 主視覺粉紫蘭點綴色 */
             --reseda-green: #697D58;   /* 復古灰綠點綴色 */
+            --butter-yellow: #EFDE9C;  /* Week 3 點綴奶油黃 */
             
             /* 導出衍生色 */
             --vandyke-light: #52341e;
@@ -187,9 +188,9 @@
         }
 
         .progress-fill {
-            width: 12.5%; /* 3/16 = 18.75% */
+            width: 18.75%; /* 3/16 = 18.75% */
             height: 100%;
-            background: linear-gradient(90deg, var(--pink-lavender), var(--reseda-green));
+            background: linear-gradient(90deg, var(--pink-lavender), var(--reseda-green), var(--butter-yellow));
             border-right: 2px solid var(--vandyke);
         }
 
@@ -236,7 +237,7 @@
         }
 
         /* ------------------------------------------
-           已解鎖按鈕 (UNLOCKED 1 & 2)
+           已解鎖按鈕 (UNLOCKED)
            ------------------------------------------ */
         .menu-btn.unlocked {
             box-shadow: 6px 6px 0px var(--vandyke);
@@ -244,16 +245,16 @@
         }
 
         /* 按鈕 1：Pink Lavender 主色 */
-        .menu-btn.unlocked.btn-1 {
-            background: #fbf0f7;
-        }
+        .menu-btn.unlocked.btn-1 { background: #fbf0f7; }
         .menu-btn.unlocked.btn-1 .btn-tag { color: #8e4f7a; }
 
         /* 按鈕 2：Reseda Green 主色 */
-        .menu-btn.unlocked.btn-2 {
-            background: #f0f4ee;
-        }
+        .menu-btn.unlocked.btn-2 { background: #f0f4ee; }
         .menu-btn.unlocked.btn-2 .btn-tag { color: var(--reseda-green); }
+
+        /* 按鈕 3：Butter Yellow 主色 */
+        .menu-btn.unlocked.btn-3 { background: #fffdf2; }
+        .menu-btn.unlocked.btn-3 .btn-tag { color: #b89314; }
 
         /* 滑鼠懸停 Hover 特效 */
         .menu-btn.unlocked:hover {
@@ -270,8 +271,11 @@
             background: var(--reseda-green);
             color: var(--isabelline);
         }
-        .menu-btn.unlocked.btn-2:hover .btn-tag {
-            color: var(--isabelline);
+        .menu-btn.unlocked.btn-2:hover .btn-tag { color: var(--isabelline); }
+
+        .menu-btn.unlocked.btn-3:hover {
+            background: var(--butter-yellow);
+            color: var(--vandyke);
         }
 
         .menu-btn.unlocked:active {
@@ -297,7 +301,7 @@
         }
 
         /* ------------------------------------------
-           未解鎖按鈕 (LOCKED 3-16)
+           未解鎖按鈕 (LOCKED)
            ------------------------------------------ */
         .menu-btn.locked {
             background: var(--locked-bg);
@@ -308,9 +312,7 @@
             opacity: 0.82;
         }
 
-        .menu-btn.locked .btn-tag {
-            color: #786f67;
-        }
+        .menu-btn.locked .btn-tag { color: #786f67; }
 
         .menu-btn.locked .lock-icon {
             font-size: 1.25rem;
@@ -355,32 +357,12 @@
         }
 
         @media (max-width: 540px) {
-            body {
-                padding: 20px 12px;
-            }
-
-            .profile-card {
-                padding: 20px 15px;
-                margin-bottom: 25px;
-            }
-
-            .profile-name {
-                font-size: 1.9rem;
-            }
-
-            .menu-grid {
-                grid-template-columns: 1fr; /* 手機端為 1 列 */
-                gap: 12px;
-            }
-
-            .menu-btn {
-                min-height: 90px;
-                padding: 14px;
-            }
-            
-            .btn-title {
-                font-size: 1rem;
-            }
+            body { padding: 20px 12px; }
+            .profile-card { padding: 20px 15px; margin-bottom: 25px; }
+            .profile-name { font-size: 1.9rem; }
+            .menu-grid { grid-template-columns: 1fr; gap: 12px; }
+            .menu-btn { min-height: 90px; padding: 14px; }
+            .btn-title { font-size: 1rem; }
         }
     </style>
 </head>
@@ -402,14 +384,14 @@
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
-                <span>2 / 16</span>
+                <span>3 / 16</span>
             </div>
         </header>
 
         <!-- 16 個按鈕 -->
         <main class="menu-grid">
             
-            <!-- 按鈕 1 (已解鎖 -> w1/index.html) -->
+            <!-- 按鈕 1 -->
             <a href="w1/index.html" class="menu-btn unlocked btn-1">
                 <div class="btn-tag">
                     <span>STAGE 01</span>
@@ -418,7 +400,7 @@
                 <div class="btn-title">Week 1-數位名片</div>
             </a>
 
-            <!-- 按鈕 2 (已解鎖 -> w2/index.html) -->
+            <!-- 按鈕 2 -->
             <a href="w2/index.html" class="menu-btn unlocked btn-2">
                 <div class="btn-tag">
                     <span>STAGE 02</span>
@@ -427,15 +409,16 @@
                 <div class="btn-title">Week 2-今天吃甚麼？</div>
             </a>
 
-            <!-- 按鈕 3 ~ 16 (未解鎖) -->
-            <div class="menu-btn locked">
+            <!-- 按鈕 3 (已解鎖連結 -> w3/index.html) -->
+            <a href="w3/index.html" class="menu-btn unlocked btn-3">
                 <div class="btn-tag">
                     <span>STAGE 03</span>
-                    <span class="lock-icon">🔒</span>
+                    <span>★ OPEN</span>
                 </div>
-                <div class="btn-title">Week 3-未解鎖任務</div>
-            </div>
+                <div class="btn-title">Week 3-迷因產生器</div>
+            </a>
 
+            <!-- 按鈕 4 ~ 16 (未解鎖) -->
             <div class="menu-btn locked">
                 <div class="btn-tag">
                     <span>STAGE 04</span>
