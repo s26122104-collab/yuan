@@ -319,3 +319,185 @@
         const nextChar = text[i + 1];
 
         if (char === '"') {
+          if (insideQuotes && nextChar === '"') { // 處理轉義雙引號
+            currentField += '"';
+            i++;
+          } else {
+            insideQuotes = !insideQuotes; // 切換雙引號狀態
+          }
+        } else if (char === ',' && !insideQuotes) {
+          row.push(currentField.trim());
+          currentField = '';
+        } else if ((char === '\r' || char === '\n') && !insideQuotes) {
+          if (char === '\r' && nextChar === '\n') {
+            i++;
+          }
+          row.push(currentField.trim());
+          if (row.length > 1 || row[0] !== '') {
+            lines.push(row);
+          }
+          row = [];
+          currentField = '';
+        } else {
+          currentField += char;
+        }
+      }
+      if (currentField || row.length > 0) {
+        row.push(currentField.trim());
+        lines.push(row);
+      }
+      return lines;
+    }
+
+    /* ==========================================================================
+       【2. Fetch 讀取 Google 試算表資料】
+       ========================================================================== */
+    async function fetchMessages() {
+      const loadingEl = document.getElementById('loading');
+      
+      try {
+        const response = await fetch(CSV_URL);
+        if (!response.ok) throw new Error('無法順利讀取 CSV 資料');
+        
+        const csvText = await response.text();
+        const parsedData = parseCSV(csvText);
+
+        // 跳過標題列 (第一列)，轉換欄位：0: 時間戳記, 1: 名字, 2: 悄悄話
+        messages = parsedData.slice(1).map(row => ({
+          timestamp: row[0] || '',
+          name: row[1] || '熱情朋友',
+          content: row[2] || '這傢伙什麼都沒有留下...'
+        })).filter(msg => msg.name !== '' || msg.content !== '');
+
+        // 隱藏載入動畫
+        loadingEl.style.display = 'none';
+
+        if (messages.length === 0) {
+          document.getElementById('cardContainer').innerHTML = '<p style="text-align:center; font-size:1.2rem; font-weight:bold;">目前還沒有任何留言喔！</p>';
+          return;
+        }
+
+        // 動態生成卡片並開啟輪播特效
+        renderCards(messages);
+        startCarousel();
+
+      } catch (error) {
+        console.error('Error fetching CSV:', error);
+        loadingEl.innerHTML = `
+          <div class="loading-text" style="background-color: #FFC0CB;">
+            讀取留言失敗，請檢查試算表權限或網路狀態！
+          </div>
+        `;
+      }
+    }
+
+    /* ==========================================================================
+       【3. 動態生成卡片 DOM】
+       ========================================================================== */
+    function renderCards(data) {
+      const container = document.getElementById('cardContainer');
+      container.innerHTML = ''; // 清空內容
+
+      data.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.setAttribute('data-index', index);
+
+        // 隨機旋轉角度 (-2度 到 +2度)，增加美式復古貼紙錯落感
+        const randomRotate = (Math.random() * 4 - 2).toFixed(1);
+        card.style.transform = `rotate(${randomRotate}deg)`;
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span class="card-name">${escapeHTML(item.name)}</span>
+            <span class="card-time">${formatTime(item.timestamp)}</span>
+          </div>
+          <div class="card-content">${escapeHTML(item.content)}</div>
+        `;
+
+        // 滑鼠游移互動：懸停時暫停自動輪播，移開後繼續
+        card.addEventListener('mouseenter', () => {
+          stopCarousel();
+          highlightCard(index);
+        });
+
+        card.addEventListener('mouseleave', () => {
+          startCarousel();
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    /* ==========================================================================
+       【4. 隨時間輪播亮起特效 (Highlight Carousel)】
+       ========================================================================== */
+    function highlightCard(index) {
+      const container = document.getElementById('cardContainer');
+      const cards = document.querySelectorAll('.card');
+
+      if (cards.length === 0) return;
+
+      // 清除上一張卡片的 Highlight 狀態
+      cards.forEach(card => card.classList.remove('is-highlighted'));
+
+      // 設定當前選中的卡片
+      currentIndex = index;
+      const targetCard = cards[currentIndex];
+      
+      if (targetCard) {
+        container.classList.add('has-highlight');
+        targetCard.classList.add('is-highlighted');
+
+        // 平滑滾動確保焦點卡片在可視區域內 (特別對手機版友善)
+        targetCard.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }
+
+    // 切換至下一張卡片
+    function nextCard() {
+      if (messages.length === 0) return;
+      const nextIndex = (currentIndex + 1) % messages.length;
+      highlightCard(nextIndex);
+    }
+
+    // 啟動計時器 (使用 CAROUSEL_INTERVAL 控制秒數)
+    function startCarousel() {
+      stopCarousel(); // 防重複定時器
+      carouselTimer = setInterval(nextCard, CAROUSEL_INTERVAL);
+    }
+
+    // 停止計時器
+    function stopCarousel() {
+      if (carouselTimer) {
+        clearInterval(carouselTimer);
+        carouselTimer = null;
+      }
+    }
+
+    /* ==========================================================================
+       【5. 防 XSS 安全轉義與時間格式化】
+       ========================================================================== */
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      // 擷取前段日期 (例如: 2023/10/25)
+      return timeStr.split(' ')[0] || timeStr;
+    }
+
+    // 頁面載入後自動啟動
+    window.addEventListener('DOMContentLoaded', fetchMessages);
+  </script>
+</body>
+</html>
