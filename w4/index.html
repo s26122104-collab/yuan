@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>美式復古朋友留言板 Retro Guestbook</title>
+
+  <!-- 引入 Google 字型: 美式復古感字型 (Monoton / Changa One / Noto Sans TC) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Changa+One:ital@0;1&family=Monoton&family=Noto+Sans+TC:wght@500;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       【顏色與主題變數設定區】
+       提示：您指定的 4 種主色已設定於此，方便您後續修改與微調！
+       ========================================================================== */
+    :root {
+      /* 指定的主色調 */
+      --color-beige: #F5F5DC;            /* 米色 BEIGE (頁面主背景) */
+      --color-champagne-pink: #F7E7CE;   /* 香檳粉 CHAMPAGNE PINK (卡片背景 / 標籤亮點) */
+      --color-pale-silver: #C9C0BB;      /* 淺銀色 PALE SILVER (卡片邊框 / 次要元素) */
+      --color-metallic-silver: #8A9EA7;  /* 金屬銀 METALLIC SILVER (陰影 / 強調色) */
+
+      /* 美式復古重色與對比色 */
+      --color-retro-dark: #2A282A;       /* 文字與主要重邊框色 */
+      --color-accent-gold: #E5A93B;      /* 復古金屬點綴色 */
+
+      /* 美式復古風格特有邊框與立體陰影 */
+      --retro-border: 3px solid var(--color-retro-dark);
+      --retro-shadow: 5px 5px 0px var(--color-metallic-silver);
+      --retro-shadow-highlight: 8px 8px 0px var(--color-retro-dark), 0 0 25px rgba(247, 231, 206, 0.9);
+
+      /* 輪播特效設定：亮起卡片的放大比例 */
+      --highlight-scale: 1.08;
+    }
+
+    /* 全局樣式重置 */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-beige);
+      /* 美式復古半點斜紋金屬風背景 */
+      background-image: 
+        radial-gradient(var(--color-pale-silver) 18%, transparent 19%),
+        radial-gradient(var(--color-pale-silver) 18%, transparent 19%);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+      font-family: 'Noto Sans TC', sans-serif;
+      color: var(--color-retro-dark);
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    /* 頁頭標題區 */
+    header {
+      text-align: center;
+      margin: 20px auto 40px;
+      max-width: 850px;
+    }
+
+    .title-badge {
+      display: inline-block;
+      background-color: var(--color-champagne-pink);
+      color: var(--color-retro-dark);
+      padding: 8px 24px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      border: var(--retro-border);
+      box-shadow: var(--retro-shadow);
+      transform: rotate(-2deg);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      font-family: 'Changa One', 'Noto Sans TC', cursive;
+      font-size: 3.2rem;
+      color: var(--color-beige);
+      /* 多重立體陰影塑造美式復古金屬招牌質感 */
+      text-shadow: 
+        3px 3px 0 var(--color-retro-dark),
+        -2px -2px 0 var(--color-retro-dark),
+        2px -2px 0 var(--color-retro-dark),
+        -2px 2px 0 var(--color-retro-dark),
+        5px 5px 0 var(--color-metallic-silver);
+      letter-spacing: 3px;
+      transform: rotate(1deg);
+    }
+
+    /* 載入中動畫區 */
+    #loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 80px 0;
+    }
+
+    /* 酷炫美式復古金屬旋轉方塊動畫 */
+    .retro-spinner {
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--color-champagne-pink), var(--color-pale-silver));
+      border: var(--retro-border);
+      box-shadow: var(--retro-shadow);
+      animation: spin 1.2s infinite steps(8);
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Monoton', cursive;
+      font-size: 2rem;
+      color: var(--color-retro-dark);
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.15); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+
+    .loading-text {
+      font-size: 1.4rem;
+      font-weight: 900;
+      background-color: var(--color-champagne-pink);
+      color: var(--color-retro-dark);
+      padding: 12px 28px;
+      border: var(--retro-border);
+      box-shadow: var(--retro-shadow);
+      letter-spacing: 2px;
+      animation: pulse 0.8s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulse {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-6px); }
+    }
+
+    /* 瀑布流 (Masonry Layout) 主容器 */
+    .masonry-grid {
+      /* 響應式欄位設定：電腦版 3 欄，平板 2 欄，手機 1 欄 */
+      column-count: 3;
+      column-gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 10px;
+    }
+
+    /* 留言卡片基礎樣式 */
+    .card {
+      break-inside: avoid; /* 防止卡片在瀑布流跨欄被截斷 */
+      margin-bottom: 30px;
+      background-color: var(--color-champagne-pink);
+      border: var(--retro-border);
+      box-shadow: var(--retro-shadow);
+      border-radius: 6px;
+      padding: 22px;
+      position: relative;
+      /* 轉場動畫，確保輪播切換時放大與模糊平滑過渡 */
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                  box-shadow 0.5s ease, 
+                  filter 0.5s ease, 
+                  opacity 0.5s ease,
+                  background-color 0.5s ease;
+      cursor: pointer;
+    }
+
+    /* 復古銀色金屬貼紙裝飾感效果 */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      width: 90px;
+      height: 22px;
+      background: linear-gradient(90deg, var(--color-pale-silver), var(--color-beige), var(--color-pale-silver));
+      border: 1px solid var(--color-retro-dark);
+      opacity: 0.95;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed var(--color-retro-dark);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card-name {
+      font-weight: 900;
+      font-size: 1.2rem;
+      background-color: var(--color-beige);
+      color: var(--color-retro-dark);
+      padding: 4px 12px;
+      border: 2px solid var(--color-retro-dark);
+      border-radius: 4px;
+      display: inline-block;
+      box-shadow: 2px 2px 0px var(--color-metallic-silver);
+    }
+
+    .card-time {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--color-metallic-silver);
+    }
+
+    .card-content {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      word-break: break-word;
+      white-space: pre-wrap; /* 保留留言換行格式 */
+      color: var(--color-retro-dark);
+      font-weight: 500;
+    }
+
+    /* ==========================================================================
+       【輪播焦點特效 (Highlight CSS)】
+       ========================================================================== */
+    
+    /* 1. 當前被選中的『放大亮起』卡片 */
+    .card.is-highlighted {
+      transform: scale(var(--highlight-scale)) rotate(1deg) !important;
+      background-color: #FFFFFF !important;
+      border: 4px solid var(--color-retro-dark) !important;
+      box-shadow: var(--retro-shadow-highlight) !important;
+      z-index: 10;
+      filter: blur(0px) brightness(1.08) !important;
+      opacity: 1 !important;
+    }
+
+    .card.is-highlighted .card-name {
+      background-color: var(--color-accent-gold);
+      color: #FFFFFF;
+      animation: badge-bounce 0.6s ease infinite alternate;
+    }
+
+    @keyframes badge-bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-4px); }
+    }
+
+    /* 2. 當有卡片被亮起時，『其他未被選中』的卡片 (變暗、變模糊) */
+    .masonry-grid.has-highlight .card:not(.is-highlighted) {
+      filter: blur(2px) brightness(0.85);
+      opacity: 0.55;
+      transform: scale(0.97);
+    }
+
+    /* 響應式斷點調整 */
+    @media (max-width: 900px) {
+      .masonry-grid {
+        column-count: 2;
+        column-gap: 20px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .masonry-grid {
+        column-count: 1;
+      }
+      h1 {
+        font-size: 2.3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頁頭標題區 -->
+  <header>
+    <div class="title-badge">★ RETRO FRIENDS BOARD ★</div>
+    <h1>朋友對我的動態留言板</h1>
+  </header>
+
+  <!-- 載入中 Cool 動畫區塊 -->
+  <div id="loading">
+    <div class="retro-spinner">★</div>
+    <div class="loading-text">讀取留言中...</div>
+  </div>
+
+  <!-- 瀑布流留言卡片牆主容器 -->
+  <main class="masonry-grid" id="cardContainer"></main>
+
+  <script>
+    /* ==========================================================================
+       【控制參數設定區】 (方便您後續快速修改輪播秒數與資料來源)
+       ========================================================================== */
+    // 1. Google 試算表 CSV 網址
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQjivyEMjICy96ylrt9qnZPWKlKgfYT-6qs15bGlRugf57KRGd-fqhb0fX_3TrIIzw7SvslxdEq1pOa/pub?output=csv';
+
+    // 2. 輪播切換時間 (單位：毫秒) -> 3000 代表 3 秒鐘
+    const CAROUSEL_INTERVAL = 3000;
+
+    // 全局控制變數
+    let messages = [];          // 儲存解析後的留言物件陣列
+    let currentIndex = -1;      // 當前亮起的卡片索引
+    let carouselTimer = null;   // setInterval 計時器實體
+
+    /* ==========================================================================
+       【1. CSV 安全解析函數】
+       妥善處理留言內容中可能包含「逗號」或「換行」的情況
+       ========================================================================== */
+    function parseCSV(text) {
+      const lines = [];
+      let row = [];
+      let currentField = '';
+      let insideQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const nextChar = text[i + 1];
+
+        if (char === '"') {
