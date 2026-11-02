@@ -4,15 +4,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>個人數位名片</title>
-    <!-- 引入外部 CSS 樣式檔 -->
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 重置基本樣式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 網頁背景：極淺淡莫蘭迪灰藍 */
+        body {
+            background-color: #EBF0F3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* 數位名片卡片本體 */
+        .card {
+            background-color: #FFFFFF;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 20px;
+            padding: 36px 40px;
+            box-shadow: 0 12px 32px rgba(74, 98, 116, 0.08);
+            border: 1px solid #DCE4EC;
+            
+            /* 使用 Flexbox：大頭貼在左、內容在右 */
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* 左側大頭貼區 */
+        .avatar-section {
+            flex-shrink: 0;
+            margin-right: 28px; /* 大頭貼與右側文字的間距 */
+        }
+
+        /* 圓形大頭貼 */
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #78909C; /* 莫蘭迪次要藍外框 */
+            box-shadow: 0 4px 12px rgba(120, 144, 156, 0.25);
+            display: block;
+        }
+
+        /* 右側文字與按鈕區 */
+        .content-section {
+            flex: 1;
+            text-align: left; /* 所有文字與內容靠左對齊 */
+        }
+
+        /* 名字樣式 */
+        .name {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2C3E50; /* 深藍灰色 */
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        /* 自我介紹文字 */
+        .bio {
+            font-size: 13.5px;
+            color: #5A738E; /* 莫蘭迪灰藍色 */
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        /* 按鈕容器 */
+        .button-group {
+            display: flex;
+            justify-content: flex-start; /* 按鈕群組靠左對齊 */
+            gap: 10px;
+        }
+
+        /* 按鈕基礎樣式 */
+        .btn {
+            display: inline-block;
+            padding: 9px 18px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.25s ease;
+            letter-spacing: 0.5px;
+        }
+
+        /* Instagram 主按鈕（實心莫蘭迪藍） */
+        .btn-primary {
+            background-color: #4A6274;
+            color: #FFFFFF;
+            border: 1px solid #4A6274;
+        }
+
+        .btn-primary:hover {
+            background-color: #394E5D;
+            border-color: #394E5D;
+            transform: translateY(-2px);
+        }
+
+        /* Email 輔助按鈕（框線莫蘭迪藍） */
+        .btn-outline {
+            background-color: #FFFFFF;
+            color: #4A6274;
+            border: 1px solid #78909C;
+        }
+
+        .btn-outline:hover {
+            background-color: #F2F6F9;
+            color: #394E5D;
+            transform: translateY(-2px);
+        }
+
+        /* 手機版響應式微調 */
+        @media (max-width: 480px) {
+            .card {
+                flex-direction: column; /* 手機上變為上下排列 */
+                text-align: center;
+                padding: 30px 20px;
+            }
+            .avatar-section {
+                margin-right: 0;
+                margin-bottom: 16px;
+            }
+            .content-section {
+                text-align: center;
+            }
+            .button-group {
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <div class="card">
         <!-- 左側圓形大頭貼區塊 -->
         <div class="avatar-section">
-            <img src=https://i.postimg.cc/LsrwVCbt/IMG-2489.jpg alt="個人大頭貼" class="avatar">
+            <img src="https://i.postimg.cc/LsrwVCbt/IMG-2489.jpg" alt="個人大頭貼" class="avatar">
         </div>
 
         <!-- 右側內容區塊 (文字與按鈕全數靠左對齊) -->
@@ -29,141 +167,3 @@
 
 </body>
 </html>
-/* 重置基本樣式 */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-/* 網頁背景：極淺淡莫蘭迪灰藍 */
-body {
-    background-color: #EBF0F3;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 20px;
-}
-
-/* 數位名片卡片本體 */
-.card {
-    background-color: #FFFFFF;
-    width: 100%;
-    max-width: 520px;
-    border-radius: 20px;
-    padding: 36px 40px;
-    box-shadow: 0 12px 32px rgba(74, 98, 116, 0.08);
-    border: 1px solid #DCE4EC;
-    
-    /* 使用 Flexbox：大頭貼在左、內容在右 */
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-}
-
-/* 左側大頭貼區 */
-.avatar-section {
-    flex-shrink: 0;
-    margin-right: 28px; /* 大頭貼與右側文字的間距 */
-}
-
-/* 圓形大頭貼 */
-.avatar {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #78909C; /* 莫蘭迪次要藍外框 */
-    box-shadow: 0 4px 12px rgba(120, 144, 156, 0.25);
-    display: block;
-}
-
-/* 右側文字與按鈕區 */
-.content-section {
-    flex: 1;
-    text-align: left; /* 所有文字與內容靠左對齊 */
-}
-
-/* 名字樣式 */
-.name {
-    font-size: 22px;
-    font-weight: 700;
-    color: #2C3E50; /* 深藍灰色 */
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
-}
-
-/* 自我介紹文字 */
-.bio {
-    font-size: 13.5px;
-    color: #5A738E; /* 莫蘭迪灰藍色 */
-    line-height: 1.6;
-    margin-bottom: 22px;
-}
-
-/* 按鈕容器 */
-.button-group {
-    display: flex;
-    justify-content: flex-start; /* 按鈕群組靠左對齊 */
-    gap: 10px;
-}
-
-/* 按鈕基礎樣式 */
-.btn {
-    display: inline-block;
-    padding: 9px 18px;
-    font-size: 13px;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 20px;
-    transition: all 0.25s ease;
-    letter-spacing: 0.5px;
-}
-
-/* Instagram 主按鈕（實心莫蘭迪藍） */
-.btn-primary {
-    background-color: #4A6274;
-    color: #FFFFFF;
-    border: 1px solid #4A6274;
-}
-
-.btn-primary:hover {
-    background-color: #394E5D;
-    border-color: #394E5D;
-    transform: translateY(-2px);
-}
-
-/* Email 輔助按鈕（框線莫蘭迪藍） */
-.btn-outline {
-    background-color: #FFFFFF;
-    color: #4A6274;
-    border: 1px solid #78909C;
-}
-
-.btn-outline:hover {
-    background-color: #F2F6F9;
-    color: #394E5D;
-    transform: translateY(-2px);
-}
-
-/* 手機版響應式微調 */
-@media (max-width: 480px) {
-    .card {
-        flex-direction: column; /* 手機上變為上下排列 */
-        text-align: center;
-        padding: 30px 20px;
-    }
-    .avatar-section {
-        margin-right: 0;
-        margin-bottom: 16px;
-    }
-    .content-section {
-        text-align: center;
-    }
-    .button-group {
-        justify-content: center;
-    }
-}
