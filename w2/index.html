@@ -260,3 +260,110 @@
                 <span class="badge-tag">TODAY'S SPECIAL</span>
                 <!-- 大標題：點擊抽籤後會被彈跳動畫替換 -->
                 <h1 id="food-title" class="title">今天吃什麼？</h1>
+            </header>
+
+            <!-- 圖片顯示區塊 (預設隱藏) -->
+            <div id="image-container" class="image-container hidden">
+                <img id="food-image" src="" alt="美食照片">
+            </div>
+
+            <!-- 按鈕組 -->
+            <div class="action-group">
+                <button id="draw-btn" class="btn btn-draw">點我抽籤！</button>
+                <a id="map-btn" href="#" target="_blank" class="btn btn-map hidden">馬上出發 📍</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 確保 HTML 載入完成後才執行內部邏輯，避免 null 錯誤
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // 1. 定義餐廳名單、圖片網址與搜尋關鍵字
+            const foodList = [
+                {
+                    name: "漢堡王",
+                    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+                    query: "漢堡王"
+                },
+                {
+                    name: "丹丹漢堡",
+                    image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=80",
+                    query: "丹丹漢堡"
+                },
+                {
+                    name: "得師傅",
+                    image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=600&q=80",
+                    query: "得師傅"
+                },
+                {
+                    name: "外省麵",
+                    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+                    query: "外省麵"
+                },
+                {
+                    name: "深水食堂",
+                    image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=600&q=80",
+                    query: "深水食堂"
+                }
+            ];
+
+            // 2. 獲取 HTML DOM 元素
+            const foodTitle = document.getElementById('food-title');
+            const foodImage = document.getElementById('food-image');
+            const imageContainer = document.getElementById('image-container');
+            const drawBtn = document.getElementById('draw-btn');
+            const mapBtn = document.getElementById('map-btn');
+
+            let isSpinning = false; // 防連點狀態
+
+            // 3. 綁定按鈕點擊事件
+            drawBtn.addEventListener('click', () => {
+                if (isSpinning) return;
+                isSpinning = true;
+                drawBtn.disabled = true;
+
+                // 移除舊的動畫 class
+                foodTitle.classList.remove('bounce-animation');
+                imageContainer.classList.remove('bounce-animation');
+
+                // 滾動效果（快速切換菜單增加抽籤樂趣）
+                let counter = 0;
+                const timer = setInterval(() => {
+                    const tempIndex = Math.floor(Math.random() * foodList.length);
+                    foodTitle.textContent = foodList[tempIndex].name;
+                    counter++;
+
+                    if (counter > 10) {
+                        clearInterval(timer);
+                        
+                        // 決定最終隨機結果
+                        const finalResult = foodList[Math.floor(Math.random() * foodList.length)];
+                        
+                        // 替換大標題與圖片
+                        foodTitle.textContent = `🎉 今天就吃：${finalResult.name}！`;
+                        foodImage.src = finalResult.image;
+                        
+                        // 動態產生 Google 地圖搜尋連結
+                        mapBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(finalResult.query)}`;
+
+                        // 顯示圖片與導航按鈕
+                        imageContainer.classList.remove('hidden');
+                        mapBtn.classList.remove('hidden');
+
+                        // 觸發生動彈跳動畫
+                        foodTitle.classList.add('bounce-animation');
+                        imageContainer.classList.add('bounce-animation');
+
+                        // 解鎖按鈕
+                        isSpinning = false;
+                        drawBtn.disabled = false;
+                        drawBtn.textContent = "再抽一次！";
+                    }
+                }, 80);
+            });
+
+        });
+    </script>
+</body>
+</html>
