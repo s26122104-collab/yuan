@@ -193,7 +193,7 @@
         }
 
         .progress-fill {
-            width: 25%; /* 4/16 = 25% */
+            width: 31.25%; /* 5/16 = 31.25% */
             height: 100%;
             background: linear-gradient(90deg, var(--pink-lavender), var(--reseda-green), var(--butter-yellow));
             border-right: 2px solid var(--vandyke);
@@ -259,6 +259,10 @@
         .menu-btn.unlocked.btn-4 { background: #f3f8f2; }
         .menu-btn.unlocked.btn-4 .btn-tag { color: #4a6839; }
 
+        /* Stage 05 專屬配色 */
+        .menu-btn.unlocked.btn-5 { background: #fff4ed; }
+        .menu-btn.unlocked.btn-5 .btn-tag { color: #c45a27; }
+
         .menu-btn.unlocked:hover {
             transform: translate(-4px, -4px);
             box-shadow: 10px 10px 0px var(--vandyke);
@@ -272,6 +276,10 @@
         /* Stage 04 Hover 動態懸浮配色 */
         .menu-btn.unlocked.btn-4:hover { background: #92b07b; color: #ffffff; }
         .menu-btn.unlocked.btn-4:hover .btn-tag { color: #ffffff; }
+
+        /* Stage 05 Hover 動態懸浮配色 */
+        .menu-btn.unlocked.btn-5:hover { background: #e07a48; color: #ffffff; }
+        .menu-btn.unlocked.btn-5:hover .btn-tag { color: #ffffff; }
 
         .menu-btn.unlocked:active {
             transform: translate(2px, 2px);
@@ -423,7 +431,7 @@
                 <div class="progress-bar">
                     <div class="progress-fill"></div>
                 </div>
-                <span>4 / 16</span>
+                <span>5 / 16</span>
             </div>
         </header>
 
@@ -466,8 +474,16 @@
                 <div class="btn-title">Week 4-動態留言板</div>
             </a>
 
-            <!-- 按鈕 5 ~ 16 (未解鎖) -->
-            <div class="menu-btn locked"><div class="btn-tag"><span>STAGE 05</span><span class="lock-icon">🔒</span></div><div class="btn-title">Week 5-未解鎖任務</div></div>
+            <!-- 按鈕 5 (已解鎖) -->
+            <a href="w5/index.html" class="menu-btn unlocked btn-5">
+                <div class="btn-tag">
+                    <span>STAGE 05</span>
+                    <span>★ OPEN</span>
+                </div>
+                <div class="btn-title">Week 5-新任務主題</div>
+            </a>
+
+            <!-- 按鈕 6 ~ 16 (未解鎖) -->
             <div class="menu-btn locked"><div class="btn-tag"><span>STAGE 06</span><span class="lock-icon">🔒</span></div><div class="btn-title">Week 6-未解鎖任務</div></div>
             <div class="menu-btn locked"><div class="btn-tag"><span>STAGE 07</span><span class="lock-icon">🔒</span></div><div class="btn-title">Week 7-未解鎖任務</div></div>
             <div class="menu-btn locked"><div class="btn-tag"><span>STAGE 08</span><span class="lock-icon">🔒</span></div><div class="btn-title">Week 8-未解鎖任務</div></div>
